@@ -1,6 +1,6 @@
 ﻿using Domain.BankAccount.Domain.Entities;
 namespace OOP1
-{
+{//asdlja;jdlkasdj;als
     internal class Program
     {
         static void Main(string[] args)
