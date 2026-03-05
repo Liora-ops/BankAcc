@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/BankAccount/">
+    <Project Path="BankAccount/Domain.BankAccount/Domain.BankAccount.csproj" />
+  </Folder>
+  <Project Path="OOP1/OOP1.csproj">
+    <BuildDependency Project="BankAccount/Domain.BankAccount/Domain.BankAccount.csproj" />
+  </Project>
+</Solution>
