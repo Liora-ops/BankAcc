@@ -30,6 +30,8 @@ namespace Domain.BankAccount.Domain.Entities
             return _idAccount + " " + Owner + " " + Balance;
         }
 
+        public BankAccount();
+
         public Transaction MakeDeposit(decimal amount, DateTime date, string note, TransactionStatus status = TransactionStatus.Deposit)
         {
             if (amount <= 0)

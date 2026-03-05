@@ -1,5 +1,7 @@
 ﻿using Domain.BankAccount.Domain.Entities;
+using Domain.BankAccount.Domain.Entities.Exceptions;
 using Domain.BankAccount.Domain.Enums;
+using Domain.BankAccount.Domain.Exceptions;
 namespace Domain.BankAccount.Domain.Entities;
 
 public class BankClient
@@ -12,6 +14,11 @@ public class BankClient
 
     public IReadOnlyCollection<BankAccount> Accounts =>
         accounts.Where(a => a.Status == BankAccountStatus.Active).ToList().AsReadOnly(); // только автивные счета
+
+    public BankClient(BankAccount bankAccount)
+    {
+        accounts.Add(bankAccount);
+    }
 
     public BankClient(string name)
     { 
@@ -31,7 +38,7 @@ public class BankClient
     public bool CloseBankAccount(BankAccount account)
     { 
         if(account == null)
-            throw new ArgumentNullException(nameof(account));
+            throw new NoValueException(nameof(account));
         if (!accounts.Contains(account))
             throw new InvalidOperationException("This account does not belong to this client");
         if (account.Status == BankAccountStatus.Closed)
@@ -82,15 +89,16 @@ public class BankClient
         if(distination == null)
             throw new ArgumentNullException(nameof(distination));
         if (!accounts.Contains(source))
-            throw new InvalidOperationException("This account does not belong to this client");
+            throw new NoSuchAccount(source);
         if (!accounts.Contains(distination))
-            throw new InvalidOperationException("This account does not belong to this client");
+            throw new NoSuchAccount(distination);
         if (source == distination)
             throw new InvalidOperationException("Source and distination accounts must be different");
         if (source.Status == BankAccountStatus.Closed || distination.Status == BankAccountStatus.Closed)
             throw new InvalidOperationException("Source or distination account is closed");
         if(source.Status == BankAccountStatus.Frozen || distination.Status == BankAccountStatus.Frozen)
             throw new InvalidOperationException("Source or distination account is frozen");
+
 
         source.Withdrawal(amount, DateTime.UtcNow, note);
         return distination.MakeDeposit(amount, DateTime.UtcNow, note);
